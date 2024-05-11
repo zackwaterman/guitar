@@ -28,29 +28,49 @@ class Stopwatch:
 def write_session_results(filename, date, time, bpm, elapsed_time):
     with open(filename, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([date, time, bpm, elapsed_time])
+        if bpm != None:
+            writer.writerow([date, time, bpm, elapsed_time])
+        else:
+            writer.writerow([date, time, elapsed_time])
+
+def start():
+    input("Press enter to begin...")
+    stopwatch.start()
+
+def cycle():
+    for i in range(numberOfKeys):
+        current_key = random.choice(keys)
+        print()
+        print("Current key:", current_key)
+        print()
+        keys.remove(current_key)
+        input("Press enter to continue...")
+
+def stop():
+    stopwatch.stop()
+    elapsed_seconds = round(stopwatch.elapsed_time())
+    elapsed_minutes = elapsed_seconds // 60
+    remaining_seconds = elapsed_seconds % 60
+    return f"{elapsed_minutes}:{remaining_seconds:02}"
 
 stopwatch = Stopwatch()
-bpm = input("Enter bpm: ")
-input("Press enter to begin...")
-stopwatch.start()
-
-for i in range(numberOfKeys):
-    currentKey = random.choice(keys)
-    print()
-    print("Current key:", currentKey)
-    print()
-    keys.remove(currentKey)
-    input("Press enter to continue...")
-
-stopwatch.stop()
-elapsed_seconds = round(stopwatch.elapsed_time())
-elapsed_minutes = elapsed_seconds // 60
-remaining_seconds = elapsed_seconds % 60
-elapsed_time_formatted = f"{elapsed_minutes}:{remaining_seconds:02}"
 
 current_date = datetime.now().strftime("%m/%d/%Y")
 current_time = datetime.now().strftime("%I:%M %p")
 
-print("Time:", elapsed_time_formatted)
-write_session_results("practice_log.csv", current_date, current_time, bpm, elapsed_time_formatted)
+mode = 0
+while mode not in ["1", "2"]:
+    mode = input("Select mode (1 for scales, 2 for fretboard): ")
+
+if mode == "1":
+    bpm = input("Enter bpm: ")
+    start()
+    cycle()
+    write_session_results("scale_log.csv", current_date, current_time, bpm, stop())
+
+else:
+    start()
+    cycle()
+    write_session_results("fretboard_log.csv", current_date, current_time, None, stop())
+
+print("Time:", stop())
