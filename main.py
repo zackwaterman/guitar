@@ -51,5 +51,6 @@ elapsed_time_formatted = f"{elapsed_minutes}:{remaining_seconds:02}"
 
 current_date = datetime.now().strftime("%m/%d/%Y")
 current_time = datetime.now().strftime("%I:%M %p")
+
 print("Time:", elapsed_time_formatted)
 write_session_results("practice_log.csv", current_date, current_time, bpm, elapsed_time_formatted)
