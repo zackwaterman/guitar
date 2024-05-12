@@ -3,8 +3,8 @@ from datetime import datetime
 import csv
 import random
 
-keys = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B']
-numberOfKeys = len(keys)
+strings = ["E", "A", "D", "G", "B", "e"]
+number_of_strings = len(strings)
 
 class Stopwatch:
     def __init__(self):
@@ -38,7 +38,10 @@ def start():
     stopwatch.start()
 
 def cycle():
-    for i in range(numberOfKeys):
+    keys = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B']
+    number_of_keys = len(keys)
+
+    for i in range(number_of_keys):
         current_key = random.choice(keys)
         print()
         print("Current key:", current_key)
@@ -69,8 +72,23 @@ if mode == "1":
     write_session_results("scale_log.csv", current_date, current_time, bpm, stop())
 
 else:
+    focus = None
+
+    while focus not in range(6):
+        focus = int(input("Enter the string you want to focus on: "))
+
     start()
-    cycle()
+
+    for i in range(number_of_strings):
+        current_string = random.choice(strings)
+        print("-----------------")
+        print("Current string:", current_string)
+        print("-----------------")
+
+        cycle()
+
+        strings.remove(current_string)
+
     write_session_results("fretboard_log.csv", current_date, current_time, None, stop())
 
 print("Time:", stop())
