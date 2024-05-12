@@ -25,10 +25,18 @@ class Stopwatch:
         else:
             return self.end_time - self.start_time
 
-def write_session_results(filename, date, time, misc, elapsed_time):
+def write_session_results(filename, mode, date, misc, elapsed_time):
+    headers = []
+    if mode == "1":
+        headers = ["Date", "BPM", "Time"]
+    elif mode == "2":
+        headers = ["Date", "String", "Time"]
+
     with open(filename, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([date, time, misc, elapsed_time])
+        if file.tell() == 0:  # Check if file is empty
+            writer.writerow(headers)
+        writer.writerow([date, misc, elapsed_time])
 
 def start():
     input("Press enter to begin...")
@@ -56,7 +64,6 @@ def stop():
 stopwatch = Stopwatch()
 
 current_date = datetime.now().strftime("%m/%d/%Y")
-current_time = datetime.now().strftime("%I:%M %p")
 
 mode = 0
 while mode not in ["1", "2"]:
@@ -66,7 +73,7 @@ if mode == "1":
     bpm = input("Enter bpm: ")
     start()
     cycle()
-    write_session_results("scale_log.csv", current_date, current_time, bpm, stop())
+    write_session_results("scale_log.csv", mode, current_date, bpm, stop())
 
 else:
     focus = None
@@ -78,6 +85,6 @@ else:
 
     cycle()
 
-    write_session_results("fretboard_log.csv", current_date, current_time, focus, stop())
+    write_session_results("fretboard_log.csv", mode, current_date, focus, stop())
 
 print("Time:", stop())
