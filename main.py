@@ -4,7 +4,6 @@ import csv
 import random
 
 strings = ["E", "A", "D", "G", "B", "e"]
-number_of_strings = len(strings)
 
 class Stopwatch:
     def __init__(self):
