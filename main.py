@@ -24,18 +24,24 @@ class Stopwatch:
         else:
             return self.end_time - self.start_time
 
-def write_session_results(filename, mode, date, misc, elapsed_time):
+def write_session_results(filename, mode, date, key_type, scale, misc, elapsed_time):
     headers = []
     if mode == "1":
-        headers = ["Date", "BPM", "Time"]
+        headers = ["Date", "Type", "Scale", "BPM", "Time"]
+        with open(filename, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            if file.tell() == 0:  # Check if file is empty
+                writer.writerow(headers)
+            writer.writerow([date, key_type, scale, misc, elapsed_time])
+
     elif mode == "2":
         headers = ["Date", "String", "Time"]
+        with open(filename, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            if file.tell() == 0:  # Check if file is empty
+                writer.writerow(headers)
+            writer.writerow([date, misc, elapsed_time])
 
-    with open(filename, mode='a', newline='') as file:
-        writer = csv.writer(file)
-        if file.tell() == 0:  # Check if file is empty
-            writer.writerow(headers)
-        writer.writerow([date, misc, elapsed_time])
 
 def start():
     input("Press enter to begin...")
@@ -70,9 +76,15 @@ while mode not in ["1", "2"]:
 
 if mode == "1":
     bpm = input("Enter bpm: ")
+    key_id = input("Enter key type (1 for major, 2 for minor): ")
+    if key_id == 1:
+        key_type = "Major"
+    else:
+        key_type = "Minor"
+    scale = input("Enter the scale you want to focus on (1-5): ")
     start()
     cycle()
-    write_session_results("scale_log.csv", mode, current_date, bpm, stop())
+    write_session_results("scale_log.csv", mode, current_date, key_type, scale, bpm, stop())
 
 else:
     focus = None
@@ -84,6 +96,6 @@ else:
 
     cycle()
 
-    write_session_results("fretboard_log.csv", mode, current_date, focus, stop())
+    write_session_results("fretboard_log.csv", mode, current_date, None, None, focus, stop())
 
 print("Time:", stop())
