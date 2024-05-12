@@ -25,13 +25,10 @@ class Stopwatch:
         else:
             return self.end_time - self.start_time
 
-def write_session_results(filename, date, time, bpm, elapsed_time):
+def write_session_results(filename, date, time, misc, elapsed_time):
     with open(filename, mode='a', newline='') as file:
         writer = csv.writer(file)
-        if bpm != None:
-            writer.writerow([date, time, bpm, elapsed_time])
-        else:
-            writer.writerow([date, time, elapsed_time])
+        writer.writerow([date, time, misc, elapsed_time])
 
 def start():
     input("Press enter to begin...")
@@ -74,21 +71,13 @@ if mode == "1":
 else:
     focus = None
 
-    while focus not in range(6):
+    while focus not in range(1, 7):
         focus = int(input("Enter the string you want to focus on: "))
 
     start()
 
-    for i in range(number_of_strings):
-        current_string = random.choice(strings)
-        print("-----------------")
-        print("Current string:", current_string)
-        print("-----------------")
+    cycle()
 
-        cycle()
-
-        strings.remove(current_string)
-
-    write_session_results("fretboard_log.csv", current_date, current_time, None, stop())
+    write_session_results("fretboard_log.csv", current_date, current_time, focus, stop())
 
 print("Time:", stop())
