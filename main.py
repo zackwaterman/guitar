@@ -77,7 +77,7 @@ while mode not in ["1", "2"]:
 if mode == "1":
     bpm = input("Enter bpm: ")
     key_id = input("Enter key type (1 for major, 2 for minor): ")
-    if key_id == 1:
+    if key_id == "1":
         key_type = "Major"
     else:
         key_type = "Minor"
